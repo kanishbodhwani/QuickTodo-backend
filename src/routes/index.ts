@@ -1,10 +1,10 @@
-import express from 'express';
-import healthRouter from './health.js';
-import usersRouter from './users.js';
+import { FastifyInstance } from 'fastify';
+import { userRoutes } from './userRoutes';
+import { todoRoutes } from './todoRoutes';
+import { listRoutes } from './listRoutes';
 
-const app = express.Router();
-
-app.use('/health', healthRouter);
-app.use('/', usersRouter);
-
-export default app;
+export const routes = (fastify: FastifyInstance) => {
+  userRoutes(fastify);
+  todoRoutes(fastify);
+  listRoutes(fastify);
+};

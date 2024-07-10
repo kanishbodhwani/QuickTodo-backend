@@ -1,44 +1,23 @@
 import Fastify from 'fastify';
-import cors from 'fastify-cors';
-import { PrismaClient } from '@prisma/client';
+import cors from '@fastify/cors';
+import { routes } from './src/routes';
+import { SERVER_PORT } from './src/constants';
+import { errorHandler } from './src/middlewares';
 
 const fastify = Fastify({ logger: true });
-const prisma = new PrismaClient();
 
-fastify.register(cors, { 
+fastify.register(cors, {
   origin: '*',
 });
 
-fastify.get('/api/users/:id', async (request, reply) => {
-  const { id } = request.params as { id: string };
-  const user = await prisma.user.findUnique({
-    where: { id },
-  });
+routes(fastify);
 
-  if (user) {
-    reply.send(user);
-  } else {
-    reply.code(404).send({ error: 'User not found' });
-  }
-});
-
-fastify.post('/api/users', async (request, reply) => {
-  const { id, username } = request.body as { id: string; username: string };
-  
-  try {
-    const newUser = await prisma.user.create({
-      data: { id, username },
-    });
-    reply.code(201).send(newUser);
-  } catch (error) {
-    reply.code(500).send({ error: 'Error creating user' });
-  }
-});
+fastify.setErrorHandler(errorHandler);
 
 const start = async () => {
   try {
-    await fastify.listen({ port: 3000 });
-    fastify.log.info(`Server listening on ${fastify.server.address}`);
+    await fastify.listen({ port: SERVER_PORT });
+    fastify.log.info(`Server listening on port ${SERVER_PORT}`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

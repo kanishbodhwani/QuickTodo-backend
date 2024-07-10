@@ -1,3 +1,1 @@
-export * from './collections';
-export * from './gender';
-export * from './authSteps';
+export const SERVER_PORT = 8000;
