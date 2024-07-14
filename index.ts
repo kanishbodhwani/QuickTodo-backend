@@ -3,12 +3,17 @@ import cors from '@fastify/cors';
 import { routes } from './src/routes';
 import { SERVER_PORT } from './src/constants';
 import { errorHandler } from './src/middlewares';
+import { userRoutes } from './src/routes/userRoutes';
+import { replicacheRoutes } from './src/routes/replicacheRoutes';
 
 const fastify = Fastify({ logger: true });
 
 fastify.register(cors, {
   origin: '*',
 });
+
+fastify.register(userRoutes);
+fastify.register(replicacheRoutes);
 
 routes(fastify);
 

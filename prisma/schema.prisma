@@ -29,3 +29,13 @@ model Todo {
   list        List    @relation(fields: [listId], references: [id])
   listId      String
 }
+
+model Change {
+  id          Int @id @default(autoincrement())
+  mutation_id Int
+  client_id   String
+  operation   String
+  table       String
+  row_id      String
+  new_value   Json
+}
